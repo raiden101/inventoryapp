@@ -1,17 +1,11 @@
 import React, { Component } from 'react';
-import MatWrapper from '../util/MatWrapper/MatWrapper';
-import axios from '../util/axios';
-import { saveToLocalStorage } from '../util/tokenManagement';
-import { toast } from 'materialize-css';
-
+import MatWrapper from '../UI/MatWrapper/MatWrapper';
+import axios from '../../util/axios';
+import { saveToLocalStorage } from '../../util/tokenManagement';
 
 const marginStyle = {
-  marginTop: '10%'
-}, paragraphStyle = {
-  color: 'red',
-  padding: '0px',
-  marginBottom: '0px'
-}
+  marginTop: '8%'
+};
 
 export default class Login extends Component {
   constructor(props) {
@@ -40,18 +34,19 @@ export default class Login extends Component {
     e.preventDefault();
     axios.post('/api/auth/login', {
       username: this.state.username,
-      password: this.state.password
+      password: this.state.password,
+      admin: this.props.adminFlag
     })
     .then(({data}) => {
       if(data.error) {
         this.setState({ loginError: data.error });
       }else {
         saveToLocalStorage(data);
-        toast({ html: "Login successfull!!" })
+        this.props.history.push('/admin/home/inventory');
       }
     })
     .catch(err => {
-      console.log(err);
+      this.setState({ loginError: "Error while loggin in!" })
     });
   }
 
@@ -63,7 +58,9 @@ export default class Login extends Component {
         onSubmit={this.onSubmitHandler} 
         className="card card-panel"
         style={{padding: '10px'}}>
-          <h4><center>{this.props.loginHeader}</center></h4>
+          <h4 className="purple-text lighten-4">
+            <center>{this.props.loginHeader}</center>
+          </h4>
           <MatWrapper colSpec="col s12 m10 offset-m1">
             <div className="input-field">
               <input 
@@ -81,7 +78,7 @@ export default class Login extends Component {
             type="password"
             onChange={this.onInputHandler} />
             <label htmlFor="password">Password</label>
-            <p style={paragraphStyle}>{this.state.loginError}</p>
+            <p className="pink-text lighten-1 noMargin noPadding">{this.state.loginError}</p>
           </MatWrapper>
           <MatWrapper colSpec="col s12 m10 offset-m1">
             <button 
