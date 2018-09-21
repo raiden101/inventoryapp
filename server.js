@@ -7,6 +7,7 @@ const port = 5000;
 
 const { closeConn, startConn } = require('./server/util/sqlConn');
 const auth = require('./server/auth');
+const adminAPI = require('./server/InvAdmin');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -14,6 +15,8 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use('/api/auth', auth);
+
+app.use('/api/admin', adminAPI);
 
 startConn(threadID => {
   console.log("Connection with sql started, threadID: ", threadID);

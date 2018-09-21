@@ -5,7 +5,7 @@ const sqlConnection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : 'root',
-  database : 'temp'
+  database : 'inventoryManagement'
 });
 
 const closeConn = callback => {

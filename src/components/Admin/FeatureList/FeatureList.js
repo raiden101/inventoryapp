@@ -8,11 +8,11 @@ export default props => {
         key={index}
         to={feature.path}
         className="collection-item"
-        style={{ color: "var(--theme-color)", fontSize: "17px" }}
+        style={{ color: "var(--theme-color)", fontSize: "17px"}}
       >
         {feature.name}
       </NavLink>
     );
   });
-  return <div className="collection">{featuresJSX}</div>
+  return <div className="collection noMargin">{featuresJSX}</div>
 };

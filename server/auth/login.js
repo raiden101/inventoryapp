@@ -14,7 +14,7 @@ const getTokenFor = (obj, callback) => {
 
 module.exports = (req, res) => {
   let loginQuery = `select count(*) 
-  from users 
+  from admin 
   where username='${req.body.username}' and
   password='${req.body.password}'`;
 
