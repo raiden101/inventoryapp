@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from "react";
 import { Route, Switch } from "react-router-dom";
 
-import FeatureList from "../FeatureList/FeatureList";
+import FeatureList from "./FeatureList";
 import Navbar from "../../Navbar/Navbar";
 import AddOwner from "../AddOwner/AddOwner";
 import AddToInventory from '../Inventory/AddToInventory';
 import InventoryItems from "../Inventory/InventoryItems";
 import NotificationHome from '../Notifications/NotificationHome';
+import AddNewShop from '../AddNewShop/AddNewShop';
 
 const adminFeatures = [
   {
@@ -21,8 +22,8 @@ const adminFeatures = [
   },
   {
     name: "Register new owner",
-    path: "/admin/addNewOwner",
-    component: AddOwner
+    path: "/admin/addNewShop",
+    component: AddNewShop
   },
   {
     name: "Notifications",
