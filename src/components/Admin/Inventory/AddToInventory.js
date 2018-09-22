@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import axios from "../../../util/axios";
 import * as invAT from "../../../actionTypes/inventory";
 
+const redirectPath = "/admin/inventory";
+
 class AddToInventory extends Component {
   constructor(props) {
     super(props);
@@ -39,33 +41,68 @@ class AddToInventory extends Component {
     }
   }
 
+  onDeleteHandler = e => {
+    axios
+      .post("/api/admin/deleteInventoryItem", {
+        itemID: this.props.selectedItem.itemID
+      })
+      .then(({ data }) => {
+        let s = data.success;
+        toast({ html: s ? "Deletion successfull" : "Error while deleting!" });
+        if (s) this.props.deleteItem(this.props.selectItemIndex);
+        this.props.history.push(redirectPath);
+      })
+      .catch(err => {
+        toast({ html: "Oops something went wrong!" });
+        this.props.history.push(redirectPath);
+      });
+  };
+
   onSubmitHandler = e => {
     e.preventDefault();
     let isUpdate = this.props.selectedItem;
-    let { 
-      itemName, pricePerUnit, quantity,
-      brandName, category, minQuantity, expiryDate 
+    let {
+      itemName,
+      pricePerUnit,
+      quantity,
+      brandName,
+      category,
+      minQuantity,
+      expiryDate
     } = this.state;
     let apiurl, newitem;
-    if(isUpdate) {
+    if (isUpdate) {
       apiurl = "/api/admin/updateInventoryItem";
       newitem = {
-        itemName, pricePerUnit, quantity, brandName,
-        category, minQuantity, expiryDate, itemID: this.state.itemID
+        itemName,
+        pricePerUnit,
+        quantity,
+        brandName,
+        category,
+        minQuantity,
+        expiryDate,
+        itemID: this.state.itemID
       };
-    }else {
+    } else {
       apiurl = "/api/admin/addToInventory";
       newitem = {
-        itemName, pricePerUnit, quantity, brandName,
-        category, minQuantity, expiryDate
+        itemName,
+        pricePerUnit,
+        quantity,
+        brandName,
+        category,
+        minQuantity,
+        expiryDate
       };
     }
     axios
       .post(apiurl, newitem)
-      .then(({data}) => {
+      .then(({ data }) => {
         toast({ html: `${data}` });
-        if(isUpdate) 
+        if (isUpdate) {
+          this.props.history.replace(redirectPath);
           this.props.updateItem(this.props.selectItemIndex, newitem);
+        }
       })
       .catch(err => {
         toast({ html: "Oops! somthing went wrong!!" });
@@ -156,13 +193,20 @@ class AddToInventory extends Component {
               />
               <label htmlFor="category">Category</label>
             </div>
-            <div className="col s12 m6">
-              <button
-                className="btn waves-effect waves-light purple darken-2"
-                style={{ marginTop: "20px" }}
-              >
-                {this.state.itemID ? "UPDATE ITEM" : "ADD TO INVENTORY"}
+            <div className="col s12 m6" style={{ marginTop: "20px" }}>
+              <button className="btn waves-effect waves-light purple darken-2">
+                {this.props.selectedItem ? "UPDATE ITEM" : "ADD TO INVENTORY"}
               </button>
+              {this.props.selectedItem ? (
+                <button
+                  type="button"
+                  onClick={this.onDeleteHandler}
+                  style={{ marginLeft: "10px" }}
+                  className="btn waves-effect waves-light red darken-3"
+                >
+                  Delete item
+                </button>
+              ) : null}
             </div>
           </div>
         </form>
@@ -192,8 +236,14 @@ const mapDispatchToProps = dispatch => {
   return {
     updateItem: (index, item) => {
       dispatch({ type: invAT.UPDATE_INV_ITEM, index, item });
+    },
+    deleteItem: index => {
+      dispatch({ type: invAT.DELETE_INV_ITEM, index });
     }
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddToInventory);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AddToInventory);

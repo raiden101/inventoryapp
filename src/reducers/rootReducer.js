@@ -42,6 +42,14 @@ const addItemToInventory = (state, item) => {
     invItems: state.invItems.concat(item)
   }
 }
+const deleteInvItem = (state, index) => {
+  let copyInvitems = [...state.invItems];
+  copyInvitems.splice(index, 1);
+  return{
+    ...state,
+    invItems: copyInvitems
+  }
+}
 
 
 
@@ -57,6 +65,8 @@ export default (state = initState, action) => {
       return updateInvItem(state, action.index, action.item);
     case invAT.ADD_ITEM_TO_INVENTORY:
       return addItemToInventory(state, action.item);
+    case invAT.DELETE_INV_ITEM:
+      return deleteInvItem(state, action.index);
     default:
       return { ...state };
   }
