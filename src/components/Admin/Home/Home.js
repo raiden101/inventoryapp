@@ -1,35 +1,37 @@
 import React, { Component, Fragment } from "react";
-import Navbar from "../../Navbar/Navbar";
+import { Route, Switch } from "react-router-dom";
+
 import FeatureList from "../FeatureList/FeatureList";
-import { Route } from "react-router-dom";
+import Navbar from "../../Navbar/Navbar";
 import AddOwner from "../AddOwner/AddOwner";
 import AddToInventory from '../Inventory/AddToInventory';
+import InventoryItems from "../Inventory/InventoryItems";
 
 const adminFeatures = [
   {
     name: "Checkout inventory",
-    path: "/admin/home/inventory",
-    component: AddOwner
+    path: "/admin/inventory",
+    component: InventoryItems
   },
   {
     name: "Add to inventory",
-    path: "/admin/home/addToInventory",
+    path: "/admin/addToInventory",
     component: AddToInventory
   },
   {
     name: "Register new owner",
-    path: "/admin/home/addNewOwner",
+    path: "/admin/addNewOwner",
     component: AddOwner
   },
   {
     name: "Notifications",
-    path: "/admin/home/notifications",
+    path: "/admin/notifications",
     component: AddOwner
   },
-  { name: "Orders", path: "/admin/home/orders", component: AddOwner }
+  { name: "Orders", path: "/admin/orders", component: AddOwner }
 ];
 
-export default class Home extends Component {
+class Home extends Component {
   render() {
     let myRoutes = adminFeatures.map(feature => {
       return (
@@ -48,10 +50,16 @@ export default class Home extends Component {
             <div className="col s12 m4" style={{ paddingLeft: "0px" }}>
               <FeatureList adminFeatures={adminFeatures} />
             </div>
-            <div className="col s12 m7 offset-m1">{myRoutes}</div>
+            <div className="col s12 m7 offset-m1">
+              <Switch>
+                {myRoutes}
+              </Switch>
+            </div>
           </div>
         </div>
       </Fragment>
     );
   }
 }
+
+export default Home;

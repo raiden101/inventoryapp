@@ -10,7 +10,7 @@ class App extends Component {
         <Route exact path="/admin/login" component={props => {
           return <Login loginHeader="Admin Login" adminFlag={1} {...props} />
         }}/>
-        <Route path="/admin/home" component={AdminHome} />
+        <Route path="/admin" component={AdminHome} />
       </Switch>
     );
   }

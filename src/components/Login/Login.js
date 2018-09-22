@@ -42,7 +42,7 @@ export default class Login extends Component {
         this.setState({ loginError: data.error });
       }else {
         saveToLocalStorage(data);
-        this.props.history.push('/admin/home/inventory');
+        this.props.history.push('/admin/inventory');
       }
     })
     .catch(err => {
