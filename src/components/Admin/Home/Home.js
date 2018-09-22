@@ -6,6 +6,7 @@ import Navbar from "../../Navbar/Navbar";
 import AddOwner from "../AddOwner/AddOwner";
 import AddToInventory from '../Inventory/AddToInventory';
 import InventoryItems from "../Inventory/InventoryItems";
+import NotificationHome from '../Notifications/NotificationHome';
 
 const adminFeatures = [
   {
@@ -26,7 +27,7 @@ const adminFeatures = [
   {
     name: "Notifications",
     path: "/admin/notifications",
-    component: AddOwner
+    component: NotificationHome
   },
   { name: "Orders", path: "/admin/orders", component: AddOwner }
 ];

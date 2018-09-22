@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MatWrapper from '../UI/MatWrapper/MatWrapper';
+import MatWrapper from '../UI/MatWrapper';
 import axios from '../../util/axios';
 import { saveToLocalStorage } from '../../util/tokenManagement';
 
