@@ -46,6 +46,11 @@ body {
 .collection .collection-item.active {
   background-color: #eee;
 }
+
+button.btn.waves-effect:focus, 
+button.btn.waves-effect:hover {
+  box-shadow: 2px 6px 9px rgba(100, 100, 100, 0.6);
+}
 /**********************************************************/
 .noMarginBottom {
   margin-bottom: 8px;

@@ -16,7 +16,7 @@ module.exports = (req, res) => {
     query = query.substr(0, query.length-2) + ` where itemID=${id};`;
     sqlConnection.query(query, (err, result) => {
       if(err)
-        res.json("Error while updating!!");
+        res.json({ error: "Error while updating!!" });
       else
         res.json("Updation successfull");
     })

@@ -58,57 +58,53 @@ class AddToInventory extends Component {
       });
   };
 
-  onSubmitHandler = e => {
-    e.preventDefault();
-    let isUpdate = this.props.selectedItem;
+  addItemHandler = e => {
     let {
-      itemName,
-      pricePerUnit,
-      quantity,
-      brandName,
-      category,
-      minQuantity,
-      expiryDate
+      itemName, pricePerUnit, quantity,
+      brandName, category,
+      minQuantity, expiryDate
     } = this.state;
-    let apiurl, newitem;
-    if (isUpdate) {
-      apiurl = "/api/admin/updateInventoryItem";
-      newitem = {
-        itemName,
-        pricePerUnit,
-        quantity,
-        brandName,
-        category,
-        minQuantity,
-        expiryDate,
-        itemID: this.state.itemID
-      };
-    } else {
-      apiurl = "/api/admin/addToInventory";
-      newitem = {
-        itemName,
-        pricePerUnit,
-        quantity,
-        brandName,
-        category,
-        minQuantity,
-        expiryDate
-      };
-    }
+    let newitem = {
+      itemName, pricePerUnit, quantity, brandName,
+      category, minQuantity, expiryDate
+    };
     axios
-      .post(apiurl, newitem)
+      .post("/api/admin/addToInventory", newitem)
       .then(({ data }) => {
         toast({ html: `${data}` });
-        if (isUpdate) {
-          this.props.history.replace(redirectPath);
-          this.props.updateItem(this.props.selectItemIndex, newitem);
-        }
       })
       .catch(err => {
         toast({ html: "Oops! somthing went wrong!!" });
       });
-  };
+  }
 
+  updateItemHandler = e => {
+    let {
+      itemName, pricePerUnit, quantity,
+      brandName, category,
+      minQuantity, expiryDate, itemID
+    } = this.state;
+    let newitem = {
+      itemName, pricePerUnit, quantity, brandName,
+      category, minQuantity, expiryDate, itemID
+    };
+    axios
+      .post("/api/admin/updateInventoryItem", newitem)
+      .then(({ data }) => {
+        if(data.error) {
+          toast({ html: `${data.error}` });
+        }else {
+          toast({ html: `${data}` });
+          this.props.updateItem(this.props.selectItemIndex, newitem);
+          this.props.history.push(redirectPath);
+        }
+      })
+      .catch(err => {
+        toast({ html: "Oops! somthing went wrong!!" });
+        this.props.history.push(redirectPath);
+      });
+  }
+  
   onChangeHandler = e => {
     this.setState({
       [e.target.name]: e.target.value
@@ -119,7 +115,7 @@ class AddToInventory extends Component {
     return (
       <Fragment>
         <h5 className="noMargin">Fill the details..</h5>
-        <form onSubmit={this.onSubmitHandler}>
+        <form>
           <div className="row">
             <div className="input-field col s12 m6">
               <input
@@ -194,19 +190,39 @@ class AddToInventory extends Component {
               <label htmlFor="category">Category</label>
             </div>
             <div className="col s12 m6" style={{ marginTop: "20px" }}>
-              <button className="btn waves-effect waves-light purple darken-2">
-                {this.props.selectedItem ? "UPDATE ITEM" : "ADD TO INVENTORY"}
-              </button>
-              {this.props.selectedItem ? (
-                <button
-                  type="button"
-                  onClick={this.onDeleteHandler}
-                  style={{ marginLeft: "10px" }}
-                  className="btn waves-effect waves-light red darken-3"
-                >
-                  Delete item
-                </button>
-              ) : null}
+              <div className="col s12 m6">
+                {
+                  this.props.selectedItem ? (
+                    <button 
+                    className="btn waves-effect waves-light purple darken-2"
+                    type="button"
+                    onClick={this.updateItemHandler}>
+                      {"UPDATE ITEM"}
+                    </button>
+                  ):(
+                    <button 
+                    className="btn waves-effect waves-light purple darken-2"
+                    type="button"
+                    onClick={this.addItemHandler}>
+                      {"ADD TO INVENTORY"}
+                    </button>
+                  )
+                }
+              </div>
+              <div className="col s12 m6">
+                {
+                  this.props.selectedItem ? (
+                    <button
+                      type="button"
+                      onClick={this.onDeleteHandler}
+                      style={{ marginLeft: "10px" }}
+                      className="btn waves-effect waves-light red darken-3"
+                    >
+                      Delete item
+                    </button>
+                  ) : null
+                }
+              </div>
             </div>
           </div>
         </form>
