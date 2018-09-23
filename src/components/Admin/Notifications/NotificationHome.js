@@ -4,7 +4,6 @@ import { Tabs } from 'materialize-css';
 import axios from 'axios';
 import TabContent from './TabContent';
 
-
 const lowStockHeader = [
   "itemName", "pricePerUnit", "minQuantity", "quantity"
 ];
@@ -17,7 +16,13 @@ export default class NotificationHome extends Component {
     lowStockItems: [],
     fetchStatus: 0,
     fetchError: "",
+    isModalOpen: false
   }
+
+  toggleModal = () => {
+    this.setState({ isModalOpen: !this.state.isModalOpen })
+  }
+
   unmounted = false;
   componentDidMount() {
     this.unmounted = false;

@@ -21,7 +21,7 @@ class InventoryItems extends Component {
 
   onDoubleClickHandler = e => {
     this.props.history.push(
-      `/admin/addToInventory/${e.target.parentElement.dataset.index}`
+      `/admin/updateItem/${e.target.parentElement.dataset.index}`
     );
   };
 

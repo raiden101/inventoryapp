@@ -12,28 +12,30 @@ import axios from 'axios';
 import { saveToLocalStorage, getToken } from '../../../util/tokenManagement';
 
 const adminFeatures = [
-  {
-    name: "Checkout inventory",
-    path: "/admin/inventory",
-    component: InventoryItems
+  { 
+    name: "Checkout inventory", path: "/admin/inventory", component: InventoryItems
   },
   {
+    name: "Add to inventory", path: "/admin/addToInventory", component: AddToInventory
+  },
+  {
+    name: "Register new owner", path: "/admin/addNewShop", component: AddNewShop
+  },
+  { name: "Notifications", path: "/admin/notifications", component: NotificationHome },
+  { name: "Orders", path: "/admin/orders", component: AddOwner }
+], additionalRoutes = [
+  {
     name: "Add to inventory",
-    path: "/admin/addToInventory",
+    path: "/admin/updateLowStockItem",
     component: AddToInventory
   },
   {
-    name: "Register new owner",
-    path: "/admin/addNewShop",
-    component: AddNewShop
-  },
-  {
-    name: "Notifications",
-    path: "/admin/notifications",
-    component: NotificationHome
-  },
-  { name: "Orders", path: "/admin/orders", component: AddOwner }
+    name: "Add to inventory",
+    path: "/admin/updateItem/:id",
+    component: AddToInventory
+  }
 ];
+const allRoutes = adminFeatures.concat(additionalRoutes);
 
 class Home extends Component {
   constructor(props) {
@@ -69,12 +71,13 @@ class Home extends Component {
   }
 
   render() {
-    let myRoutes = adminFeatures.map(feature => {
+    let myRoutes = allRoutes.map(feature => {
       return (
         <Route
           key={feature.name}
           path={feature.path}
           component={feature.component}
+          exact
         />
       );
     });

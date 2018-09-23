@@ -204,7 +204,7 @@ class AddToInventory extends Component {
                     className="btn waves-effect waves-light purple darken-2"
                     type="button"
                     onClick={this.addItemHandler}>
-                      {"ADD TO INVENTORY"}
+                      {"ADD ITEM"}
                     </button>
                   )
                 }
@@ -232,20 +232,21 @@ class AddToInventory extends Component {
 }
 
 const mapStateToProps = (state, props) => {
+  let id = props.match.params.id;
   let pathname = props.location.pathname;
-  if (
-    pathname !== "/admin/addToInventory" ||
-    pathname !== "/admin/addToInventory/"
-  ) {
-    let index = Number(pathname.slice(pathname.length - 1));
+  if(id) {
+    let index = Number(id);
     return {
       selectedItem: state.invItems[index],
       selectItemIndex: index
     };
-  }
-  return {
-    selectedItem: null
-  };
+  }else if(pathname.match(/lowstock/i)) {
+    // analyze url query
+    return {
+      selectedItem: null
+    }
+  }else 
+    return { selectedItem: null };
 };
 
 const mapDispatchToProps = dispatch => {

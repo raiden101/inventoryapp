@@ -11,10 +11,15 @@ export default props => {
     let tds = [];
     for(let i=0;i<hlen;++i)
       tds.push(<td key={i}>{el[headerArray[i]]}</td>);
-    return <tr key={index}>{tds}</tr>;
+    return (
+      <tr key={index} 
+      onClick={props.onRowClicked.bind(this, index)}>
+        {tds}
+      </tr>
+    );
   })
   return (
-    <table>
+    <table className="highlight">
       <thead>
         <tr>{headerJSX}</tr>
       </thead>
