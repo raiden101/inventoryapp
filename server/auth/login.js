@@ -23,7 +23,7 @@ module.exports = (req, res) => {
     if(resCount > 0) {
       getTokenFor({
         username: req.body.username,
-        password: req.body.password
+        admin: 1
       }, (err, token) => {
         if(err)
           res.json({ error: "Error while loggin in!" });

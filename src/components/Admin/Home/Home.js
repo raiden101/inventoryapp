@@ -8,6 +8,8 @@ import AddToInventory from '../Inventory/AddToInventory';
 import InventoryItems from "../Inventory/InventoryItems";
 import NotificationHome from '../Notifications/NotificationHome';
 import AddNewShop from '../AddNewShop/AddNewShop';
+import axios from 'axios';
+import { saveToLocalStorage, getToken } from '../../../util/tokenManagement';
 
 const adminFeatures = [
   {
@@ -34,6 +36,38 @@ const adminFeatures = [
 ];
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    axios.interceptors.response.use(config => {
+      if(config.data.auth === -1) {
+        saveToLocalStorage("");
+        this.props.history.replace('/admin/login');
+        return null;
+      }
+      return config;
+    })
+  }
+
+  componentDidMount() {
+    axios
+      .post('/api/auth/checkAuth', { token: getToken() })
+      .then(data => {
+        if(data.data.error) {
+          this.props.history.replace('/admin/login');
+          saveToLocalStorage("");
+        }
+      })
+      .catch(err => {
+        saveToLocalStorage("");
+        this.props.history.replace('/admin/login');
+      })
+  }
+
+  onLogout = e => {
+    saveToLocalStorage("");
+    this.props.history.replace('/admin/login');
+  }
+
   render() {
     let myRoutes = adminFeatures.map(feature => {
       return (
@@ -46,7 +80,7 @@ class Home extends Component {
     });
     return (
       <Fragment>
-        <Navbar />
+        <Navbar  onLogout={this.onLogout}/>
         <div className="container">
           <div className="row">
             <div className="col s12 m4" style={{ paddingLeft: "0px" }}>

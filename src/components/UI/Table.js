@@ -6,7 +6,7 @@ export default props => {
   let headerJSX = headerArray.map((el, index) => {
     return <th key={index}>{el}</th>
   });
-  
+
   let tableBodyJSX = props.body.map((el, index) => {
     let tds = [];
     for(let i=0;i<hlen;++i)

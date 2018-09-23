@@ -80,3 +80,13 @@ button.btn.waves-effect:hover {
 .noPadding {
   padding: 0px;
 }
+
+.icon {
+  max-width: 30px;
+  margin: 7px 0px 0px 10px; 
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.icon:hover {
+  transform: scale(1.1);
+}

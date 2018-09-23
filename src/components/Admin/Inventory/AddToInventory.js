@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { toast } from "materialize-css";
 import { connect } from "react-redux";
 
-import axios from "../../../util/axios";
+import axios from "axios";
 import * as invAT from "../../../actionTypes/inventory";
 
 const redirectPath = "/admin/inventory";

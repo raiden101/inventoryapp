@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import axios from "../../../util/axios";
+import axios from "axios";
 import MatWrapper from "../../UI/MatWrapper";
 import { connect } from 'react-redux';
 import * as invAT from '../../../actionTypes/inventory';

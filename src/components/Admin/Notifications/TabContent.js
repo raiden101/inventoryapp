@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import Table from '../../UI/Table';
 import Loader from '../../UI/Loader';
 
-export default class LowStockItems extends PureComponent {
+export default class TabContent extends PureComponent {
   render() {
     let { fetchStatus } = this.props;
     if(fetchStatus === 1) 

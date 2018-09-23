@@ -9,6 +9,8 @@ const { closeConn, startConn } = require('./server/util/sqlConn');
 const auth = require('./server/auth');
 const adminAPI = require('./server/InvAdmin');
 
+const tokenVerificationM = require('./server/auth/verifyTokenMiddleware');
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -16,7 +18,7 @@ app.use(cors());
 
 app.use('/api/auth', auth);
 
-app.use('/api/admin', adminAPI);
+app.use('/api/admin', tokenVerificationM, adminAPI);
 
 startConn(threadID => {
   console.log("Connection with sql started, threadID: ", threadID);

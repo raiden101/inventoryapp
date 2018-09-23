@@ -8,6 +8,14 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import rootReducer from './reducers/rootReducer';
 
+import axios from 'axios';
+import { getToken } from './util/tokenManagement';
+
+axios.interceptors.request.use(config => {
+  config.headers['token'] = getToken();
+  return config;
+});
+
 const store = createStore(rootReducer);
 
 ReactDOM.render(

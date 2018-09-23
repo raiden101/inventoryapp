@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Tabs } from 'materialize-css';
-import axios from '../../../util/axios';
+
+import axios from 'axios';
 import TabContent from './TabContent';
+
 
 const lowStockHeader = [
   "itemName", "pricePerUnit", "minQuantity", "quantity"
@@ -12,74 +14,35 @@ const expiredStockHeader = [
 export default class NotificationHome extends Component {
   state = {
     expiredItems: [],
-    expiredItemsFetchStatus: 0,
-    expiredItemsFetchError: "",
     lowStockItems: [],
-    lowStockItemsFetchStatus: 0,
-    lowStockItemsFetchError: ""
+    fetchStatus: 0,
+    fetchError: "",
   }
-
-  getExpiredItems = () => {
-    // this.setState({ 
-    //   expiredItemsFetchStatus: 0,
-    //   expiredItemsFetchError: ""
-    // })
-    axios
-      .get('/api/admin/getExpiredItems')
-      .then(({data}) => {
-        if(data.error)
-          this.setState({
-            expiredItemsFetchError: data.error,
-            expiredItemsFetchStatus: -1
-          });
-        else
-          this.setState({
-            expiredItems: data,
-            expiredItemsFetchError: "",
-            expiredItemsFetchStatus: 1
-          })
-      })
-      .catch(err => {
-        this.setState({
-          expiredItemsFetchError: "Ooops! something went wrong!!",
-          expiredItemsFetchStatus: -1
-        })
-      })
-  }
-  getLowStockItems = () => {
-    // this.setState({
-    //   lowStockItemsFetchStatus: 0,
-    //   lowStockItemsFetchError: ""
-    // });
-    axios
-      .get('/api/admin/getLowStockItems')
-      .then(({data}) => {
-        if(data.error)
-          this.setState({
-            lowStockItemsFetchError: data.error,
-            lowStockItemsFetchStatus: -1
-          });
-        else {
-          this.setState({
-            lowStockItems: data,
-            lowStockItemsFetchError: "",
-            lowStockItemsFetchStatus: 1
-          })
-        }
-      })
-      .catch(err => {
-        this.setState({
-          lowStockItemsFetchError: "Ooops! something went wrong!!",
-          lowStockItemsFetchStatus: -1
-        })
-      })
-  }
-
+  unmounted = false;
   componentDidMount() {
+    this.unmounted = false;
     Tabs.init(document.getElementById('notificationTabs'));
-    this.getExpiredItems();
-    this.getLowStockItems();
+    axios.get('/api/admin/getNotifications')
+    .then(({data}) => {
+      if(data.error)
+        !this.unmounted && this.setState({ fetchStatus: -1, fetchError: data.error })
+      else
+        !this.unmounted && this.setState({ 
+          expiredItems: data[0], 
+          lowStockItems: data[1],
+          fetchStatus: 1,
+          fetchError: ""
+        })
+    })
+    .catch(err => {
+      !this.unmounted && this.setState({ fetchStatus: -1, fetchError: "Oops! something went wrong!!" });
+    })
   }
+  
+  componentWillUnmount() {
+    this.unmounted = true;
+  }
+
   render() {
     return (
       <div className="row">
@@ -97,16 +60,16 @@ export default class NotificationHome extends Component {
           <TabContent 
           header={expiredStockHeader}
           items={this.state.expiredItems}
-          fetchError={this.state.expiredItemsFetchError}
-          fetchStatus={this.state.expiredItemsFetchStatus}
+          fetchError={this.state.fetchError}
+          fetchStatus={this.state.fetchStatus}
           />
         </div>
         <div id="test2" className="col s12">
           <TabContent 
           header={lowStockHeader}
           items={this.state.lowStockItems}
-          fetchError={this.state.lowStockItemsFetchError}
-          fetchStatus={this.state.lowStockItemsFetchStatus}
+          fetchError={this.state.fetchError}
+          fetchStatus={this.state.fetchStatus}
           />
         </div>
       </div> 
