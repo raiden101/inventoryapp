@@ -16,7 +16,7 @@ const userDate = temp => {
 
 const getLowStockItems = () => {
   let query = `
-    select itemName, pricePerUnit, minQuantity, quantity
+    select *
     from inventory
     where quantity <= minQuantity
   `;
@@ -24,8 +24,12 @@ const getLowStockItems = () => {
     sqlConnection.query(query, (err, result) => {
       if(err)
         reject("Error while fetching data!!");
-      else
+      else {
+        let len = result.length;
+        for(let i=0;i<len;++i) 
+          result[i]['expiryDate'] = userDate(result[i]['expiryDate'])
         resolve(result);
+      }
     })
   });
   
@@ -33,7 +37,7 @@ const getLowStockItems = () => {
 
 const getExpiredItems = () => {
   let query = `
-    select itemName, pricePerUnit, expiryDate, quantity
+    select itemID, itemName, pricePerUnit, expiryDate, quantity
     from inventory
     where expiryDate <= '${sqlDate(new Date())}'
   `;

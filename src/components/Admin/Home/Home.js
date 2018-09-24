@@ -26,11 +26,6 @@ const adminFeatures = [
 ], additionalRoutes = [
   {
     name: "Add to inventory",
-    path: "/admin/updateLowStockItem",
-    component: AddToInventory
-  },
-  {
-    name: "Add to inventory",
     path: "/admin/updateItem/:id",
     component: AddToInventory
   }
@@ -92,6 +87,9 @@ class Home extends Component {
             <div className="col s12 m7 offset-m1">
               <Switch>
                 {myRoutes}
+                <Route path="/admin/updateLowStockItem"
+                exact={false}
+                component={AddToInventory} />
               </Switch>
             </div>
           </div>

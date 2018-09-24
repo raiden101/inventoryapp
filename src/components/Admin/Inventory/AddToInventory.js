@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { toast } from "materialize-css";
 import { connect } from "react-redux";
+import qs from 'querystring';
 
 import axios from "axios";
 import * as invAT from "../../../actionTypes/inventory";
@@ -241,9 +242,17 @@ const mapStateToProps = (state, props) => {
       selectItemIndex: index
     };
   }else if(pathname.match(/lowstock/i)) {
-    // analyze url query
+    let item = qs.parse(props.location.search.slice(1)); 
+    let id = Number(item.itemID);
     return {
-      selectedItem: null
+      selectedItem: {
+        itemName: item.in, quantity: item.qn, pricePerUnit: item.ppu,
+        minQuantity: item.mq, expiryDate: item.d, category: item.cat,
+        brandName: item.bn, itemID: item.id
+      },
+      selectedItemIndex: state.invItems.findIndex((el, index) => {
+        return el.itemID === id;
+      })
     }
   }else 
     return { selectedItem: null };

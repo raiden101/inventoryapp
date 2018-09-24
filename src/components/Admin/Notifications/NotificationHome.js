@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
-import { Tabs } from 'materialize-css';
+import React, { Component, Fragment } from 'react'
+import { Tabs, toast } from 'materialize-css';
 
 import axios from 'axios';
 import TabContent from './TabContent';
+import Modal from '../../UI/Modal';
 
 const lowStockHeader = [
   "itemName", "pricePerUnit", "minQuantity", "quantity"
@@ -16,11 +17,22 @@ export default class NotificationHome extends Component {
     lowStockItems: [],
     fetchStatus: 0,
     fetchError: "",
-    isModalOpen: false
+    modalOpen: false,
+    modalDataIndex: -1
   }
 
-  toggleModal = () => {
-    this.setState({ isModalOpen: !this.state.isModalOpen })
+  onRowClicked = index => {
+    this.setState({ modalDataIndex: index, modalOpen: true });
+  }
+
+  onExpiredItemClick = index => {
+    this.setState({ modalData: this.state.expiredItems[index]  });
+  }
+
+  removeExpiredItem = () => {
+    let copy = [...this.state.expiredItems];
+    copy.splice(this.state.modalDataIndex, 1);
+    this.setState({ expiredItems: copy });
   }
 
   unmounted = false;
@@ -48,36 +60,79 @@ export default class NotificationHome extends Component {
     this.unmounted = true;
   }
 
+  onAgree = () => {
+    let item = this.state.expiredItems[this.state.modalDataIndex];
+    if(item)
+      axios
+        .post('/api/admin/deleteInventoryItem', {
+          itemID: item.itemID 
+        })
+        .then(({data}) => {
+          if(data.success) {
+            toast({ html: "Deletion successfull" })
+            this.removeExpiredItem();
+            this.setState({ modalDataIndex: -1 });
+          }else
+            toast({ html: "Error while deleting" })
+        })
+        .catch(err => {
+          toast({ html: "Ooops!! something went wrong!" });
+        })
+    
+    this.setState({ modalOpen: false })
+  }
+
+  onDisagree = () => {
+    this.setState({ modalOpen: false })
+  }
+
+  onLowStockItemClicked = index => {
+    let item = this.state.lowStockItems[index];
+    let queryString = `?in=${item.itemName}&qn=${item.quantity}&id=${item.itemID}&bn=${item.brandName}&ppu=${item.pricePerUnit}&mq=${item.minQuantity}&d=${item.expiryDate}&cat=${item.category}`
+    this.props.history.push('/admin/updateLowStockItem' + queryString);
+  }
+
   render() {
     return (
-      <div className="row">
-        <div className="col s12" style={{marginBottom: '15px'}}>
-          <ul className="tabs purple-text" id="notificationTabs">
-            <li className="tab col s3">
-              <a href="#test1">Expired Items</a>
-            </li>
-            <li className="tab col s3">
-              <a href="#test2">Low Stock</a>
-            </li>
-          </ul>
-        </div>
-        <div id="test1" className="col s12">
-          <TabContent 
-          header={expiredStockHeader}
-          items={this.state.expiredItems}
-          fetchError={this.state.fetchError}
-          fetchStatus={this.state.fetchStatus}
-          />
-        </div>
-        <div id="test2" className="col s12">
-          <TabContent 
-          header={lowStockHeader}
-          items={this.state.lowStockItems}
-          fetchError={this.state.fetchError}
-          fetchStatus={this.state.fetchStatus}
-          />
-        </div>
-      </div> 
+      <Fragment>
+        <Modal 
+        modalID="expiredItem"
+        onAgree={this.onAgree}
+        onDisagree={this.onDisagree}
+        item={this.state.expiredItems[this.state.modalDataIndex]}
+        open={this.state.modalOpen}/>
+        <div className="row">
+          <div className="col s12" style={{marginBottom: '15px'}}>
+            <ul className="tabs purple-text" id="notificationTabs">
+              <li className="tab col s3">
+                <a href="#test1">Expired Items</a>
+              </li>
+              <li className="tab col s3">
+                <a href="#test2">Low Stock</a>
+              </li>
+            </ul>
+          </div>
+          <div id="test1" className="col s12">
+            <TabContent 
+            header={expiredStockHeader}
+            items={this.state.expiredItems}
+            fetchError={this.state.fetchError}
+            fetchStatus={this.state.fetchStatus}
+            onRowClicked={this.onRowClicked}
+            />
+          </div>
+          <div id="test2" className="col s12">
+            <TabContent 
+            header={lowStockHeader}
+            items={this.state.lowStockItems}
+            fetchError={this.state.fetchError}
+            fetchStatus={this.state.fetchStatus}
+            onRowClicked={this.onLowStockItemClicked}
+            />
+          </div>
+        </div> 
+      </Fragment>
+     
     )
   }
 }
