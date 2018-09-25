@@ -13,17 +13,22 @@ const getTokenFor = (obj, callback) => {
 }
 
 module.exports = (req, res) => {
-  let loginQuery = `select count(*) 
-  from admin 
+  let loginQuery = req.body.adminFlag === 1 ? `select count(*) 
+  from admin
   where username='${req.body.username}' and
-  password='${req.body.password}'`;
+  password='${req.body.password}'` : 
+  `select count(*) 
+  from shop
+  where shopid='${req.body.username}' and
+  password='${req.body.password}'   
+  `
 
   sqlConnection.query(loginQuery, (err, result, fields) => {
     let resCount = result[0]['count(*)'];
     if(resCount > 0) {
       getTokenFor({
         username: req.body.username,
-        admin: 1
+        adminFlag: req.body.adminFlag
       }, (err, token) => {
         if(err)
           res.json({ error: "Error while loggin in!" });

@@ -35,14 +35,17 @@ export default class Login extends Component {
     axios.post('/api/auth/login', {
       username: this.state.username,
       password: this.state.password,
-      admin: this.props.adminFlag
+      adminFlag: this.props.adminFlag
     })
     .then(({data}) => {
       if(data.error) {
         this.setState({ loginError: data.error });
       }else {
         saveToLocalStorage(data);
-        this.props.history.push('/admin/inventory');
+        this.props.history.push({
+          pathname: this.props.successRoute,
+          auth: true
+        });
       }
     })
     .catch(err => {

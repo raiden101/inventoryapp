@@ -44,7 +44,11 @@ body {
 }
 
 .collection .collection-item.active {
-  background-color: #eee;
+  background-color: rgba(245, 245, 245, 0.9);
+}
+
+.collection .collection-item:hover {
+  background-color: rgba(235, 235, 235, 0.8);
 }
 
 button.btn.waves-effect:focus, 
@@ -89,4 +93,10 @@ button.btn.waves-effect:hover {
 }
 .icon:hover {
   transform: scale(1.1);
+}
+
+.centerOfPage {
+  position: absolute;
+  left: 50%;top: 50%;
+  transform: translate(-50%, -50%);
 }

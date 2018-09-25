@@ -1,8 +1,9 @@
 import React from 'react'
 
 export default props => {
+  let navClasses = "nav-wrapper " + props.navColor;
   return (
-    <nav className="nav-wrapper purple darken-1" style={{marginBottom: '35px'}}>
+    <nav className={navClasses} style={{marginBottom: '35px'}}>
       <div className="container">
         <a className="brand-logo">Logo</a>
         <ul id="nav-mobile" className="right">

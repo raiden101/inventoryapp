@@ -1,15 +1,16 @@
 import React, { Component, Fragment } from "react";
 import { Route, Switch } from "react-router-dom";
 
-import FeatureList from "./FeatureList";
-import Navbar from "../../Navbar/Navbar";
+import Loader from '../../UI/Loader';
+import FeatureList from "../../UI/FeatureList";
+import Navbar from "../../UI/Navbar";
 import AddOwner from "../AddOwner/AddOwner";
 import AddToInventory from '../Inventory/AddToInventory';
 import InventoryItems from "../Inventory/InventoryItems";
 import NotificationHome from '../Notifications/NotificationHome';
 import AddNewShop from '../AddNewShop/AddNewShop';
 import axios from 'axios';
-import { saveToLocalStorage, getToken } from '../../../util/tokenManagement';
+import { saveToLocalStorage, getToken, tokenExists } from '../../../util/tokenManagement';
 
 const adminFeatures = [
   { 
@@ -45,19 +46,33 @@ class Home extends Component {
     })
   }
 
+  redirectToLogin() {
+    this.props.history.replace('/login');
+  }
+
+  state = {
+    auth: false
+  }
+
   componentDidMount() {
-    axios
-      .post('/api/auth/checkAuth', { token: getToken() })
-      .then(data => {
-        if(data.data.error) {
-          this.props.history.replace('/admin/login');
+    if(this.props.location.auth === true)
+      this.setState({ auth: true });
+    else if(tokenExists()) {
+      axios
+        .post('/api/auth/checkAuth', { token: getToken() })
+        .then(({data}) => {
+          if(data.error || data.adminFlag === 0) {
+            saveToLocalStorage("");
+            this.redirectToLogin();
+          }else 
+            this.setState({ auth: true })
+        })
+        .catch(err => {
           saveToLocalStorage("");
-        }
-      })
-      .catch(err => {
-        saveToLocalStorage("");
-        this.props.history.replace('/admin/login');
-      })
+          this.redirectToLogin();
+        })
+    }else
+      this.redirectToLogin();
   }
 
   onLogout = e => {
@@ -66,36 +81,43 @@ class Home extends Component {
   }
 
   render() {
-    let myRoutes = allRoutes.map(feature => {
+    if(this.state.auth) {
+      let myRoutes = allRoutes.map(feature => {
+        return (
+          <Route
+            key={feature.name}
+            path={feature.path}
+            component={feature.component}
+            exact
+          />
+        );
+      });
       return (
-        <Route
-          key={feature.name}
-          path={feature.path}
-          component={feature.component}
-          exact
-        />
-      );
-    });
-    return (
-      <Fragment>
-        <Navbar  onLogout={this.onLogout}/>
-        <div className="container">
-          <div className="row">
-            <div className="col s12 m4" style={{ paddingLeft: "0px" }}>
-              <FeatureList adminFeatures={adminFeatures} />
-            </div>
-            <div className="col s12 m7 offset-m1">
-              <Switch>
-                {myRoutes}
-                <Route path="/admin/updateLowStockItem"
-                exact={false}
-                component={AddToInventory} />
-              </Switch>
+        <Fragment>
+          <Navbar
+          navColor="purple darken-1" 
+          onLogout={this.onLogout}/>
+          <div className="container">
+            <div className="row">
+              <div className="col s12 m4" style={{ paddingLeft: "0px" }}>
+                <FeatureList 
+                fontColor="purple-text darken-2"
+                features={adminFeatures} />
+              </div>
+              <div className="col s12 m7 offset-m1">
+                <Switch>
+                  {myRoutes}
+                  <Route path="/admin/updateLowStockItem"
+                  exact={false}
+                  component={AddToInventory} />
+                </Switch>
+              </div>
             </div>
           </div>
-        </div>
-      </Fragment>
-    );
+        </Fragment>
+      );
+    }
+    return <center className="centerOfPage"><Loader /></center>
   }
 }
 
