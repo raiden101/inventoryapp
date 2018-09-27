@@ -16,7 +16,7 @@ export default props => {
       tds.push(<td key={i}>{el[headerArray[i]]}</td>);
     return (
       <tr key={index} 
-      onClick={
+      onDoubleClick={
         props.onRowClicked ? props.onRowClicked.bind(this, index) : null
       }>
         {tds}

@@ -15,5 +15,5 @@ export default props => {
       </NavLink>
     );
   });
-  return <div className="collection noMargin">{featuresJSX}</div>
+  return <div id="featureListID" className="collection noMargin">{featuresJSX}</div>
 };

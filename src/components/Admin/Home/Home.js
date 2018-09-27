@@ -39,7 +39,7 @@ class Home extends Component {
     axios.interceptors.response.use(config => {
       if(config.data.auth === -1) {
         saveToLocalStorage("");
-        this.props.history.replace('/admin/login');
+        this.props.history.replace('/login');
         return null;
       }
       return config;

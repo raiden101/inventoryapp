@@ -13,6 +13,7 @@ import FeatureList from "../UI/FeatureList";
 import Profile from "./Profile/Profile";
 import PlaceOrder from "./PlaceOrder/PlaceOrder";
 import MyOrders from "./MyOrders/MyOrders";
+import OrderItem from './OrderItem/OrderItem';
 
 const userFeatures = [
   { path: "/user/placeOrder", component: PlaceOrder, name: "New Order" },
@@ -20,10 +21,25 @@ const userFeatures = [
   { path: "/user/myOrders", component: MyOrders, name: "My Orders" }
 ];
 
+const additionalRoutes = [
+  { path: "/user/orderItem/:itemID", component: OrderItem }
+];
+
 export default class User extends Component {
-  state = {
-    auth: false
-  };
+  constructor(props) {
+    super(props);
+    axios.interceptors.response.use(config => {
+      if(config.data.auth === -1) {
+        saveToLocalStorage("");
+        this.props.history.replace('/login');
+        return null;
+      }
+      return config;
+    })
+    this.state = {
+      auth: false
+    };
+  }
 
   onLogout = () => {
     saveToLocalStorage(null);
@@ -50,9 +66,18 @@ export default class User extends Component {
   }
 
   render() {
-    let toShow;
+    let toShow, welcomeMessage = null;
+    let { pathname } = this.props.location;
     if (this.state.auth) {
-      let routes = userFeatures.map((el, index) => (
+      if(pathname === '/user' || pathname === '/user/') {
+        welcomeMessage = (
+          <div className="valign">
+            <h5 className="fade"><center>Hello User</center></h5>
+            <h4 className="fade"><center>Select an option in the menu to get started.</center></h4>                  
+          </div>
+        );
+      }
+      let routes = userFeatures.concat(additionalRoutes).map((el, index) => (
         <Route 
         key={index}
         path={el.path} 
@@ -65,6 +90,7 @@ export default class User extends Component {
             <div className="row">
               <div className="col s12 m8">
                 <Switch>{routes}</Switch>
+                {welcomeMessage}
               </div>
               <div className="col s12 m4">
                 <FeatureList

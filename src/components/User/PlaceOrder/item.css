@@ -1,0 +1,29 @@
+#searchResults .item {
+  border: 1px solid rgba(140, 140, 140, 0.6);
+  border-radius: 4px;
+  padding: 8px 26px 3px 26px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-content: stretch;
+  box-sizing: border-box;
+  color: rgb(60, 60, 60);
+}
+
+#searchResults .item:hover {
+  background-color: rgba(240, 240, 240, 0.4);
+  border: 1px solid rgba(140, 140, 140, 0.1);
+}
+
+#searchResults .item h5 {
+  font-size: 21px;
+  margin-bottom: 4px;
+}
+
+#searchResults .item h5 span {
+  font-size: 19px
+}
+
+
