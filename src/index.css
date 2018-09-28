@@ -1,6 +1,8 @@
 :root {
   --theme-color: #6a1b9a;
   --tc-lighten-1: #ab47bc;
+  --ut-ligh: #90caf9;
+  --user-theme: #42a5f5;
 }
 
 body {
@@ -24,6 +26,22 @@ body {
   .container {
     width: 84%;
   }
+}
+
+#userComponent .input-field input[type=text]:focus + label, 
+#userComponent .input-field input[type=password]:focus + label,
+#userComponent .input-field input[type=number]:focus + label,
+#userComponent .input-field input[type=date]:focus + label, 
+#userComponent .materialize-textarea:focus:not([readonly]) + label {
+  color: var(--user-theme) !important;
+}
+#userComponent .input-field input[type=text]:focus, 
+#userComponent .input-field input[type=password]:focus,
+#userComponent .input-field input[type=number]:focus,
+#userComponent .input-field input[type=date]:focus,
+#materialize-textarea:focus:not([readonly]) {
+  border-bottom: 1px solid var(--user-theme) !important;
+  box-shadow: 0 1px 0 0 var(--user-theme) !important;
 }
 
 .input-field input[type=text]:focus + label, 

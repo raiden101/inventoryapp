@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import axios from "axios";
 import { Route, Switch } from "react-router-dom";
 
@@ -14,11 +14,13 @@ import Profile from "./Profile/Profile";
 import PlaceOrder from "./PlaceOrder/PlaceOrder";
 import MyOrders from "./MyOrders/MyOrders";
 import OrderItem from './OrderItem/OrderItem';
+import MyCart from './MyCart/MyCart';
 
 const userFeatures = [
   { path: "/user/placeOrder", component: PlaceOrder, name: "New Order" },
   { path: "/user/profile", component: Profile, name: "My Profile" },
-  { path: "/user/myOrders", component: MyOrders, name: "My Orders" }
+  { path: "/user/myOrders", component: MyOrders, name: "My Orders" },
+  { path: "/user/cart", component: MyCart, name: "My Cart" },
 ];
 
 const additionalRoutes = [
@@ -84,23 +86,24 @@ export default class User extends Component {
         component={el.component} />
       ));
       toShow = (
-        <Fragment>
+        <div id="userComponent">
           <Navbar onLogout={this.onLogout} navColor="blue lighten-3" />
           <div className="container">
             <div className="row">
-              <div className="col s12 m8">
-                <Switch>{routes}</Switch>
-                {welcomeMessage}
-              </div>
-              <div className="col s12 m4">
+              <div className="col s12 m4 push-m8"
+              style={{marginBottom: "15px"}}>
                 <FeatureList
                   fontColor="blue-text lighten-4"
                   features={userFeatures}
                 />
               </div>
+              <div className="col s12 m8 pull-m4">
+                <Switch>{routes}</Switch>
+                {welcomeMessage}
+              </div>
             </div>
           </div>
-        </Fragment>
+        </div>
       );
     } else
       toShow = (

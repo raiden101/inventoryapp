@@ -16,7 +16,7 @@ export default props => {
           </h5>
         </div>
         <h6 className="noMaring noPadding">
-          Rs.{props.pricePerUnit}/-
+          Rs. {props.pricePerUnit}/-
         </h6>
       </div>
     </Link>

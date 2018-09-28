@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 // import searchIcon from '../../../util/a.png';
 import Item from './Item';
+import Loader from '../../UI/Loader';
 
 import axios from 'axios';
 export default class PlaceOrder extends Component {
@@ -49,7 +50,9 @@ export default class PlaceOrder extends Component {
       searchResultJSX = <h5 className="fade center">Start searching!!</h5>;
     else if(this.state.searchError)
       searchResultJSX = <h5 className="center">{this.state.searchError}</h5>;
-    else if(this.state.searchResult.length === 0) 
+    else if(this.state.searching)
+      searchResultJSX = <center><Loader color="blue"/></center>
+    else if(!this.state.searching && this.state.searchResult.length === 0) 
       searchResultJSX = <h5 className="center">No search result!!</h5>
     else 
       searchResultJSX = (
