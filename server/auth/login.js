@@ -18,7 +18,7 @@ module.exports = (req, res) => {
   where username='${req.body.username}' and
   password='${req.body.password}'` : 
   `select count(*) 
-  from shop
+  from owner
   where shopid='${req.body.username}' and
   password='${req.body.password}'   
   `

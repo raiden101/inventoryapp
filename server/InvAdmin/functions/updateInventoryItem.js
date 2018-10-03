@@ -2,8 +2,8 @@ const { sqlConnection } = require('../../util/sqlConn');
 
 module.exports = (req, res) => {
   let data = req.body;
-  if(data.itemID) {
-    let query = "update inventory set ";
+  if(!isNaN(data.itemID)) {
+    let query = "update item set ";
     let id = data.itemID;
     delete data['itemID'];
     for(let key in data) {

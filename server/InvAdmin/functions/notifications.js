@@ -1,6 +1,5 @@
 const { sqlConnection } = require('../../util/sqlConn');
 const { promisify } = require('util');
-const SQLquery = promisify(sqlConnection.query);
 
 const sqlDate = temp => {
   let month = temp.getMonth()+1, date = temp.getDate();
@@ -17,7 +16,7 @@ const userDate = temp => {
 const getLowStockItems = () => {
   let query = `
     select *
-    from inventory
+    from item
     where quantity <= minQuantity
   `;
   return new Promise((resolve, reject) => {
@@ -38,7 +37,7 @@ const getLowStockItems = () => {
 const getExpiredItems = () => {
   let query = `
     select itemID, itemName, pricePerUnit, expiryDate, quantity
-    from inventory
+    from item
     where expiryDate <= '${sqlDate(new Date())}'
   `;
   return new Promise((resolve, reject) => {

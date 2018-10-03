@@ -2,13 +2,18 @@ const { sqlConnection } = require('../../util/sqlConn');
 
 module.exports = (req, res) => {
   let query = `
-  select * from shop
-  where shopid=${req.userData.username}
+  select shop.shopID, shop.name as shopName, address, telephone,
+  owner.name as ownerName, phoneNumber
+  from shop, owner
+  where shop.shopID=${req.userData.username}
+  and shop.shopID = owner.shopID
   `;
   sqlConnection.query(query, (err, result) => {
-    if(result.length === 0)
+    if(err)
+      res.json({ error: "Error while fetching data!!" })
+    else if(result.length === 0)
       res.json({ error: "No record found!!" });
     else
-      res.json(err ? { error: "Error while fetching data!!" } : result[0]);
+      res.json(result[0]);
   })
 }

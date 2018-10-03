@@ -3,7 +3,7 @@ const { sqlConnection } = require('../../util/sqlConn');
 module.exports = (req, res) => {
   let query = `
   select * 
-  from inventory
+  from item
   where itemID >= ${req.body.itemIDStartingFrom}
   limit 3
   `;

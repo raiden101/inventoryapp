@@ -28,7 +28,7 @@ class InventoryItems extends Component {
   getInventoryItems = () => {
     this.props.startFetching();
     let invLen = this.props.invItems.length;
-    let begID = (invLen === 0) ? 1 : this.props.invItems[invLen-1].itemID + 1;
+    let begID = (invLen === 0) ? 0 : this.props.invItems[invLen-1].itemID + 1;
     axios
       .post("/api/admin/getInventoryItems", {
         itemIDStartingFrom: begID

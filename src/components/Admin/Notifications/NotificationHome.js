@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from 'react'
 import { Tabs, toast } from 'materialize-css';
-
 import axios from 'axios';
+import { connect } from 'react-redux';
+
 import TabContent from './TabContent';
 import Modal from '../../UI/Modal';
+import * as AT from '../../../actionTypes/inventory';
 
 const lowStockHeader = [
   "itemName", "pricePerUnit", "minQuantity", "quantity"
@@ -11,7 +13,7 @@ const lowStockHeader = [
 const expiredStockHeader = [
   "itemName", "pricePerUnit", "expiryDate", "quantity"
 ];
-export default class NotificationHome extends Component {
+class NotificationHome extends Component {
   state = {
     expiredItems: [],
     lowStockItems: [],
@@ -71,6 +73,7 @@ export default class NotificationHome extends Component {
           if(data.success) {
             toast({ html: "Deletion successfull" })
             this.removeExpiredItem();
+            this.props.deleteInvItem();
             this.setState({ modalDataIndex: -1 });
           }else
             toast({ html: "Error while deleting" })
@@ -136,3 +139,12 @@ export default class NotificationHome extends Component {
     )
   }
 }
+
+const mapDispatchToProps = dispatch => {
+  return {
+    deleteInvItem: index => { 
+      dispatch({ type: AT.DELETE_INV_ITEM, index: index  }) 
+    }
+  }
+}
+export default connect(null, mapDispatchToProps)(NotificationHome);
