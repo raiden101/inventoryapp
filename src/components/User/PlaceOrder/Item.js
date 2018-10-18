@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 export default props => {
   return (
     <Link 
-    to= {`/user/orderItem/${props.itemID}`}>
+    to= {`/user/viewItem/${props.itemID}`}>
       <div className="item">
         <div>
           <h5 className="noMargin noPadding">

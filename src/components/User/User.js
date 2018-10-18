@@ -13,7 +13,7 @@ import FeatureList from "../UI/FeatureList";
 import Profile from "./Profile/Profile";
 import PlaceOrder from "./PlaceOrder/PlaceOrder";
 import MyOrders from "./MyOrders/MyOrders";
-import OrderItem from './OrderItem/OrderItem';
+import ViewItem from './ViewItem/ViewItem';
 import MyCart from './MyCart/MyCart';
 
 const userFeatures = [
@@ -24,7 +24,7 @@ const userFeatures = [
 ];
 
 const additionalRoutes = [
-  { path: "/user/orderItem/:itemID", component: OrderItem }
+  { path: "/user/viewItem/:itemID", component: ViewItem }
 ];
 
 export default class User extends Component {
