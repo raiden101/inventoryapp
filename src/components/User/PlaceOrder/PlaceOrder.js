@@ -75,8 +75,8 @@ export default class PlaceOrder extends Component {
             <button 
             disabled={btnDisabled}
             className="btn blue lighten-3 waves-effect"
-            style={{paddingRight: '28px'}}>
-              search
+            style={{padding: '0px 30px'}}>
+              <i className="fa fa-search fa-xs"></i>  
             </button>          
           </div>
         </form>

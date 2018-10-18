@@ -9,28 +9,35 @@ export default function cartItem({
   itemName,
   totalPrice,
   pricePerUnit,
-  available
+  available,
+  onItemDelete
 }) {
-  let icon = (available === 1) ? "fa fa-check available" : "fa fa-times notAvailable";
+  let icon =
+    available === 1 ? "fa fa-check green-text" : "red-text fa fa-times notAvailable";
   return (
-    <Link to={`/user/viewItem/${itemID}?fromCart=true`}>
-      <i className="fa fa-uncheck"></i>
+    <Link to={`/user/viewItem/${itemID}`}>
       <div className="cartItem">
         <div className="upper">
           <div className="_left">
-            <h5>{brandName}</h5>
-            <h6>{itemName}</h6>
+            <h6><u><b>{brandName}</b></u></h6>
+            <p>{itemName}</p>
+            <p>Order quantity: {quantity}</p>
+            <p>Price/unit: Rs.{pricePerUnit}</p>
           </div>
           <div className="_right">
-            <h5>Order Quantity: {quantity}</h5>
-            <h6>Price/Unit: Rs.{pricePerUnit}</h6>
+            <i className="fa fa-trash grey-text"
+            onClick={onItemDelete} />
+            <h6>Total price: Rs.{totalPrice}</h6>
           </div>
         </div>
         <div className="lower">
-          <h5>
+          <h6>
             Availability: <i className={icon} />
-          </h5>
-          <h5>Total Price: Rs.{totalPrice}</h5>
+          </h6>
+          <button className="btn teal lighten-2">
+            <i className="fa fa-shopping-cart" />
+            Order
+          </button>
         </div>
       </div>
     </Link>

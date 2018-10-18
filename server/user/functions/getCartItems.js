@@ -8,11 +8,22 @@ module.exports = (req, res) => {
   where C.itemID = I.itemID and
   shopID = ${req.userData.username}`;
 
-  sqlConnection.query(query, (err, result) => {
-    res.json(
-      err ?
-      { error: "Error while fetching!!" } :
-      { data: result }
-    );
+  let cartCostQuery = `select sum(cart.quantity*item.pricePerUnit) as tot
+  from cart, item
+  where cart.itemID = item.itemID
+  and shopID=${req.userData.username}`
+
+  sqlConnection.query(query, (err, result1) => {
+    if(err) {
+      res.json({ error: "Error while fetching!!" });
+      return;
+    }
+    sqlConnection.query(cartCostQuery, (err, result2) => {
+      if(err) {
+        res.json({ error: "Error while fetching!!" });
+        return;
+      }
+      res.json({ cartItems: result1, totalCost: result2[0]['tot'] });
+    });
   })
 } 

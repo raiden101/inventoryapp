@@ -11,13 +11,9 @@ export default class OrderItem extends Component {
     item: null,
     fetchError: "",
     orderQuantity: 0,
-    addingToCart: false,
-    fromCart: false,
-    removingFromCart: false
+    addingToCart: false
   };
   componentDidMount() {
-    let searchP = new URLSearchParams(this.props.location.search);
-    if (searchP.get("fromCart") === "true") this.setState({ fromCart: true });
 
     this.setState({ loading: true });
     axios
@@ -39,23 +35,6 @@ export default class OrderItem extends Component {
           loading: false
         });
       });
-  }
-  removeFromCart = () => {
-    this.setState({ removingFromCart: true });
-    axios
-      .get(`/api/user/removeFromCart/${this.props.match.params.itemID}`)
-      .then(({data}) => {
-        this.setState({ removingFromCart: false });
-        // if no error
-        if(!data.match(/error/i)) 
-          this.setState({ fromCart: false, orderQuantity: 0 });
-        toast({ html: data })
-      })
-      .catch(err => { 
-        this.setState({ removingFromCart: false });
-        toast({ html: 'Error while removing item!!' 
-      }); 
-    })
   }
 
   onSubmitHandler = e => {
@@ -124,21 +103,11 @@ export default class OrderItem extends Component {
                     }
                     className="btn waves-effect waves-light blue lighten-2"
                   >
+                  <i className="fa fa-plus" 
+                    style={{marginRight: '5px', fontSize: '16px'}}>
+                    </i>
                     Add to cart
-                  </button>
-                  <button
-                    type="button"
-                    onClick={this.removeFromCart}
-                    style={{marginLeft: '20px', display: this.state.fromCart ? "inline-block": "none"}}
-                    value={this.state.orderQuantity}
-                    disabled={
-                      this.state.orderQuantity <= 0 || this.state.removingFromCart
-                    }
-                    className="btn waves-effect waves-light red lighten-2"
-                  >
-                    Remove from cart
-                  </button>
-                  
+                  </button>            
                 </div>
               </form>
             </div>
