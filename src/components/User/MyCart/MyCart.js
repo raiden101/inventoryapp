@@ -14,14 +14,50 @@ export default class MyCart extends Component {
     totalCartCost: 0
   }
 
+  refetch() {
+    axios
+      .get('/api/user/getCartItems')
+      .then(({data}) => {
+        if(data.error)
+          this.setState({ fetchError: data.error, loading: false });
+        else 
+          this.setState({ 
+            cartItems: data.cartItems, 
+            loading: false,
+            totalCartCost: data.totalCost
+        })
+      })
+      .catch(err => {
+        this.setState({ fetchError: "Oops!somethin went wrong!!", loading: false });
+      })
+  }
+
+  onItemOrder = (e, item) => {
+    e.preventDefault();
+    this.setState({ loading: true });
+    axios
+      .post('/api/user/orderItem', 
+      { itemID: item.itemID, quantity: item.quantity })
+      .then(({data}) => {
+        this.setState({ loading: false });
+        if(data.match(/error/i) === null)
+          this.removeFromLocalCart(item.itemID);
+        toast({ html: data });
+      })
+      .catch(_ => {
+        this.setState({ loading: false });
+      })
+  }
+
   orderAll = () => {
     this.setState({ loading: true });
     axios
       .get('/api/user/orderAll')
       .then(({data}) => {
-        this.setState({ loading: false });
         if(data.match(/error/i) === null)
-          this.setState({ cartItems: [], totalCartCost: 0 });
+          this.refetch();
+        else // if there is error
+          this.setState({ loading: false })
         toast({ html: data });
       })
       .catch(err => { 
@@ -49,7 +85,7 @@ export default class MyCart extends Component {
 
   removeFromCart = (e, itemID) => {
     e.preventDefault(); 
-    this.setState({ loading: true })
+    this.setState({ loading: true });
     axios
       .get(`/api/user/removeFromCart/${itemID}`)
       .then(({data}) => {
@@ -65,21 +101,7 @@ export default class MyCart extends Component {
   }
   
   componentDidMount() {
-    axios
-      .get('/api/user/getCartItems')
-      .then(({data}) => {
-        if(data.error)
-          this.setState({ fetchError: data.error, loading: false });
-        else 
-          this.setState({ 
-            cartItems: data.cartItems, 
-            loading: false,
-            totalCartCost: data.totalCost
-         })
-      })
-      .catch(err => {
-        this.setState({ fetchError: "Oops!somethin went wrong!!", loading: false });
-      })
+    this.refetch();
   }
 
   render() {
@@ -95,7 +117,8 @@ export default class MyCart extends Component {
         <div className="cartContainer">
           <div className="row">
             <button className="indigo btn waves-effect lighten-1"
-            onClick={this.orderAll}>
+            onClick={this.orderAll}
+            disabled={this.state.totalCartCost <= 0}>
               <i className="fa fa-shopping-cart"></i>
               Order All (Rs.{this.state.totalCartCost})
             </button>
@@ -104,7 +127,8 @@ export default class MyCart extends Component {
             <div className="cartItemsGrid">
               {this.state.cartItems.map(item => {
                   return <CartItem {...item} key={item.itemID} 
-                  onItemDelete={e => this.removeFromCart(e, item.itemID)} />
+                  onItemDelete={e => this.removeFromCart(e, item.itemID)}
+                  onItemOrder={e => this.onItemOrder(e, item)} />
               })}
             </div>
           </div>

@@ -5,7 +5,7 @@ const addToCart = require('./functions/addToCart');
 const itemInfo = require('./functions/itemInfo');
 const getCartItems = require('./functions/getCartItems');
 const removeFromCart = require('./functions/removeFromCart');
-const { orderAll } = require('./functions/orderItems');
+const { orderAll, orderItem } = require('./functions/orderItems');
 
 router.get('/profile', getProfile);
 
@@ -17,13 +17,13 @@ router.get('/itemInfo/:itemID', itemInfo);
 
 router.post('/addToCart', addToCart);
 
-// router.post('/orderItems', orderItems);
-
 router.get('/getCartItems', getCartItems);
 
 router.get('/removeFromCart/:itemID', removeFromCart);
 
 router.get('/orderAll', orderAll);
+
+router.post('/orderItem', orderItem);
 
 
 module.exports = router;

@@ -2,12 +2,29 @@ const { sqlConnection } = require("../../util/sqlConn");
 
 const errMsg = "Error while ordering items!";
 
+const getSQLDate = () => {
+  let d = new Date();
+  let month = d.getMonth() + 1, date = d.getDate();
+  let nmonth = month < 10 ? '0' + month : month;
+  let ndate = date < 10 ? '0' + date : date;
+  return `${d.getFullYear()}-${nmonth}-${ndate}`;
+}
+
 const deletUserCart = shopID => {
+  // delete only those whose orderCOunt < count in itemList table.
+  let q = `delete from cart
+  where shopID=${shopID} and
+  itemID in (
+    select itemID from(
+      select C.itemID 
+      from cart C, item I
+      where C.itemID = I.itemID and
+      C.quantity <= I.quantity
+    ) as A
+  );`
   return new Promise((resolve, reject) => {
-    sqlConnection.query(`delete from cart 
-    where shopID=${shopID}`,
-      (err, r4) => {
-        err ? reject() : resolve();
+    sqlConnection.query(q, (err, r4) => {
+        err ? reject(err) : resolve();
       }
     );
   });
@@ -20,11 +37,11 @@ const updateQuantity = items => new Promise((resolve, reject) => {
     where itemID=${item.itemID};
     `;
     sqlConnection.query(q, (err, res) => {
-      err ? ireject() : iresolve();
+      err ? ireject(err) : iresolve();
     })
   })))
   .then(_ => resolve())
-  .catch(_ => reject());
+  .catch(_ => reject(err));
 });
 
 
@@ -43,19 +60,22 @@ const getNextId = () => {
 };
 
 module.exports.orderAll = (req, res) => {
-  let getCartItems = `select * from cart 
-    where shopID=${req.userData.username}`;
+  let getCartItems = `select C.shopID, C.itemID, C.quantity
+  from cart C, item I
+  where C.itemID = I.itemID and
+  C.quantity <= I.quantity and 
+  C.shopID=${req.userData.username}`;
   sqlConnection.query(getCartItems, (err, cartItems) => {
     if (err) {
+      console.log(3, err);
       res.json("Error while ordering!!");
       return;
     }
     getNextId()
       .then(id => {
-        let d = new Date();
-        let date = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+        
         let newArray = cartItems.map(el => {
-          return [id, el.shopID, el.itemID, el.quantity, date];
+          return [id, el.shopID, el.itemID, el.quantity, getSQLDate()];
         });
 
         // inserting into orderList.
@@ -75,7 +95,8 @@ module.exports.orderAll = (req, res) => {
                 res.json("Order Successfull");
               })
               .catch(err => {
-                res.json(err);
+                console.log(4, err);
+                res.json(errMsg);
               });
           }
         );
@@ -85,3 +106,37 @@ module.exports.orderAll = (req, res) => {
       });
   });
 };
+
+
+module.exports.orderItem = (req, res) => {
+  let itemID = req.body.itemID, 
+  shopID = req.userData.username,
+  qty = req.body.quantity;
+
+  getNextId()
+  .then(id => {
+    let q = `insert into orderList(orderID, shopID, itemID, orderDate, quantity) 
+    values(${id}, ${shopID}, ${itemID}, '${getSQLDate()}', ${qty})`;
+    // adding to orderList
+    sqlConnection.query(q, (err, r1) => {
+      if(err) { console.log(1, err);res.json(errMsg);return; }
+      // removing from cart;
+      let q1 = `delete from cart
+      where itemID=${itemID} and shopID=${shopID};`;
+      sqlConnection.query(q1, (err, r2) => {
+        if(err) { console.log(2, err);res.json(errMsg);return; }
+        // update item table.
+        updateQuantity([{itemID: itemID, quantity: qty}])
+        .then(_ => {
+          res.json("Order successfull");
+        })
+        .catch(_ => {
+          res.json(errMsg);
+        })
+      })
+    })
+  })
+  .catch(err => {
+    res.json(errMsg);
+  })
+}

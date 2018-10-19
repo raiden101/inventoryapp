@@ -10,7 +10,8 @@ export default function cartItem({
   totalPrice,
   pricePerUnit,
   available,
-  onItemDelete
+  onItemDelete,
+  onItemOrder
 }) {
   let icon =
     available === 1 ? "fa fa-check green-text" : "red-text fa fa-times notAvailable";
@@ -34,7 +35,9 @@ export default function cartItem({
           <h6>
             Availability: <i className={icon} />
           </h6>
-          <button className="btn teal lighten-2">
+          <button className="btn teal lighten-2"
+          onClick={onItemOrder}
+          disabled={available === 1 ? false : true}>
             <i className="fa fa-shopping-cart" />
             Order
           </button>

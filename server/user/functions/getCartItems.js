@@ -11,6 +11,7 @@ module.exports = (req, res) => {
   let cartCostQuery = `select sum(cart.quantity*item.pricePerUnit) as tot
   from cart, item
   where cart.itemID = item.itemID
+  and item.quantity >= cart.quantity
   and shopID=${req.userData.username}`
 
   sqlConnection.query(query, (err, result1) => {
@@ -23,7 +24,8 @@ module.exports = (req, res) => {
         res.json({ error: "Error while fetching!!" });
         return;
       }
-      res.json({ cartItems: result1, totalCost: result2[0]['tot'] });
+      let temp = result2[0]['tot'];
+      res.json({ cartItems: result1, totalCost: (temp === null) ? 0 : temp });
     });
   })
 } 
