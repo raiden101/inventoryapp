@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Login from './components/Login/Login';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import AdminHome from './components/Admin/Home/Home';
+import AdminHome from './components/Admin/Admin';
 import User from './components/User/User';
 
 class App extends Component {

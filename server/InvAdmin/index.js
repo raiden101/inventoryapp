@@ -5,6 +5,7 @@ const updateInventoryItem = require('./functions/updateInventoryItem');
 const deleteInventoryItem = require('./functions/deleteItem');
 const getNotifications = require('./functions/notifications');
 const addNewShop = require('./functions/addNewShop');
+const { getOrders, getOrderedItems } = require('./functions/getOrders');
 
 router.post('/addToInventory', addToInventory);
 
@@ -16,7 +17,10 @@ router.post('/deleteInventoryItem', deleteInventoryItem);
 
 router.get('/getNotifications', getNotifications);
 
-
 router.post('/addNewShop', addNewShop);
+
+router.get('/getOrders', getOrders);
+
+router.post('/getOrderedItems', getOrderedItems);
 
 module.exports = router;

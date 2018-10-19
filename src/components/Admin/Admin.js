@@ -1,16 +1,17 @@
 import React, { Component, Fragment } from "react";
 import { Route, Switch } from "react-router-dom";
-
-import Loader from '../../UI/Loader';
-import FeatureList from "../../UI/FeatureList";
-import Navbar from "../../UI/Navbar";
-import AddOwner from "../AddOwner/AddOwner";
-import AddToInventory from '../Inventory/AddToInventory';
-import InventoryItems from "../Inventory/InventoryItems";
-import NotificationHome from '../Notifications/NotificationHome';
-import AddNewShop from '../AddNewShop/AddNewShop';
 import axios from 'axios';
-import { saveToLocalStorage, getToken, tokenExists } from '../../../util/tokenManagement';
+
+import Loader from '../UI/Loader';
+import FeatureList from "../UI/FeatureList";
+import Navbar from "../UI/Navbar";
+import AddToInventory from './Inventory/AddToInventory';
+import InventoryItems from "./Inventory/InventoryItems";
+import NotificationHome from './Notifications/NotificationHome';
+import AddNewShop from './AddNewShop/AddNewShop';
+import Orders from './Orders/Orders';
+import ViewOrder from '../UI/common/ViewOrder';
+import { saveToLocalStorage, getToken, tokenExists } from '../../util/tokenManagement';
 
 const adminFeatures = [
   { 
@@ -23,12 +24,17 @@ const adminFeatures = [
     name: "Register new owner", path: "/admin/addNewShop", component: AddNewShop
   },
   { name: "Notifications", path: "/admin/notifications", component: NotificationHome },
-  { name: "Orders", path: "/admin/orders", component: AddOwner }
+  { name: "Orders", path: "/admin/orders", component: Orders }
 ], additionalRoutes = [
   {
-    name: "Add to inventory",
+    name: "add to inv",
     path: "/admin/updateItem/:id",
     component: AddToInventory
+  },
+  { 
+    name: "view order",
+    path: "/admin/viewOrder/:orderID",
+    component: ViewOrder
   }
 ];
 const allRoutes = adminFeatures.concat(additionalRoutes);
@@ -99,7 +105,8 @@ class Home extends Component {
           onLogout={this.onLogout}/>
           <div className="container">
             <div className="row">
-              <div className="col s12 m4" style={{ paddingLeft: "0px" }}>
+              <div className="col s12 m4" 
+              style={{ paddingLeft: "0px", marginBottom: '25px' }}>
                 <FeatureList 
                 fontColor="purple-text darken-2"
                 features={adminFeatures} />

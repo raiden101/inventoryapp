@@ -191,7 +191,7 @@ class AddToInventory extends Component {
               <label htmlFor="category">Category</label>
             </div>
             <div className="col s12 m6" style={{ marginTop: "20px" }}>
-              <div className="col s12 m6">
+              <div className="col s6">
                 {
                   this.props.selectedItem ? (
                     <button 
@@ -210,7 +210,7 @@ class AddToInventory extends Component {
                   )
                 }
               </div>
-              <div className="col s12 m6">
+              <div className="col s6">
                 {
                   this.props.selectedItem ? (
                     <button

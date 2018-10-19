@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 
-import Loader from '../../UI/Loader';
+import Loader from '../Loader';
 import { getProperDate } from '../../../util/util';
 
 export default class ViewOrder extends Component {
@@ -12,9 +12,12 @@ export default class ViewOrder extends Component {
   }
 
   componentDidMount() {
+    let apiurl = "/api/admin/getOrderedItems";
+    if(this.props.location.pathname.indexOf('user') === 1)
+      apiurl = '/api/user/getOrderedItems';
     let orderID = this.props.match.params.orderID;
     axios
-      .post('/api/user/getOrderedItems', { orderID })
+      .post(apiurl, { orderID })
       .then(({data}) => {
         if(data.error)
           this.setState({ loading: false, fetchError: data.error });

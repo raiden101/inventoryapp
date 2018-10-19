@@ -4,7 +4,6 @@ import axios from "axios";
 import { Link } from 'react-router-dom';
 
 import { getProperDate } from '../../../util/util';
-
 import Loader from "../../UI/Loader";
 import "./MyOrders.css";
 import "../MyCart/cart.css";
@@ -41,7 +40,8 @@ export default class extends React.Component {
     let toShow = null;
     if (this.state.orderList.length > 0) {
       toShow = (
-        <div className="cartItemsGrid">
+        <div className="cartItemsGrid"
+        style={{marginTop: '9px'}}>
           {this.state.orderList.map((el, index) => {
             return (
               <div className="cartItem" key={el.orderID}>

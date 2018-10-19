@@ -15,7 +15,7 @@ import PlaceOrder from "./PlaceOrder/PlaceOrder";
 import MyOrders from "./MyOrders/MyOrders";
 import ViewItem from './ViewItem/ViewItem';
 import MyCart from './MyCart/MyCart';
-import ViewOrder from './MyOrders/ViewOrder';
+import ViewOrder from '../UI/common/ViewOrder';
 
 const userFeatures = [
   { path: "/user/placeOrder", component: PlaceOrder, name: "New Order" },
