@@ -6,6 +6,7 @@ const itemInfo = require('./functions/itemInfo');
 const getCartItems = require('./functions/getCartItems');
 const removeFromCart = require('./functions/removeFromCart');
 const { orderAll, orderItem } = require('./functions/orderItems');
+const { getOrders, getOrderedItems } = require('./functions/getOrderInfo');
 
 router.get('/profile', getProfile);
 
@@ -25,5 +26,8 @@ router.get('/orderAll', orderAll);
 
 router.post('/orderItem', orderItem);
 
+router.get('/getOrders', getOrders);
+
+router.post('/getOrderedItems', getOrderedItems);
 
 module.exports = router;

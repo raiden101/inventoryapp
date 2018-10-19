@@ -28,7 +28,7 @@ export default function cartItem({
           <div className="_right">
             <i className="fa fa-trash grey-text"
             onClick={onItemDelete} />
-            <h6>Total price: Rs.{totalPrice}</h6>
+            <h6>Price: Rs.{totalPrice}</h6>
           </div>
         </div>
         <div className="lower">

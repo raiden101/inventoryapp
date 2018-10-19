@@ -15,6 +15,7 @@ import PlaceOrder from "./PlaceOrder/PlaceOrder";
 import MyOrders from "./MyOrders/MyOrders";
 import ViewItem from './ViewItem/ViewItem';
 import MyCart from './MyCart/MyCart';
+import ViewOrder from './MyOrders/ViewOrder';
 
 const userFeatures = [
   { path: "/user/placeOrder", component: PlaceOrder, name: "New Order" },
@@ -24,7 +25,8 @@ const userFeatures = [
 ];
 
 const additionalRoutes = [
-  { path: "/user/viewItem/:itemID", component: ViewItem }
+  { path: "/user/viewItem/:itemID", component: ViewItem },
+  { path: "/user/viewOrder/:orderID", component: ViewOrder }
 ];
 
 export default class User extends Component {
