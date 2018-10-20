@@ -32,7 +32,7 @@ startConn(threadID => {
   console.log("Connection with sql started, threadID: ", threadID);
 })
 
-app.listen(port, () => {
+app.listen(process.env.PORT || port, () => {
   console.log(`listening to port ${port}`)
 });
 
