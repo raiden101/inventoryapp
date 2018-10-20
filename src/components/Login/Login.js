@@ -51,7 +51,7 @@ export default class Login extends Component {
       }
     })
     .catch(err => {
-      this.setState({ loginError: "Error while loggin in!" })
+      this.setState({ loginError: "Error while loggin in!", buttonText: "Login" })
     });
   }
 
