@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const cors = require('cors');
+// const cors = require('cors');
+const path = require('path');
 
 const port = 5000;
 
@@ -17,13 +18,15 @@ const userTokenMiddleware = tokenVerificationGen(0);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(cors());
+// app.use(cors());
 
 app.use('/api/auth', auth);
 
 app.use('/api/admin', adminTokenMiddleware, adminAPI);
 
 app.use('/api/user', userTokenMiddleware, userAPI);
+
+app.use(express.static(path.join(__dirname, "./build")));
 
 startConn(threadID => {
   console.log("Connection with sql started, threadID: ", threadID);

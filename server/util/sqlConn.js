@@ -1,12 +1,14 @@
 const mysql = require('mysql');
 const fs = require('fs');
+const { dbInfo } = require('../../credentials');
 
-const sqlConnection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'root',
-  database : 'invm'
-});
+// const sqlConnection = mysql.createConnection({
+//   host     : 'localhost',
+//   user     : 'root',
+//   password : 'root',
+//   database : 'invm'
+// });
+const sqlConnection = mysql.createConnection(dbInfo);
 
 const closeConn = callback => {
   sqlConnection.end(err => {
