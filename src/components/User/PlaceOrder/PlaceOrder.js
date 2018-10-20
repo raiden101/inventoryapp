@@ -65,7 +65,7 @@ export default class PlaceOrder extends Component {
       
     return (
       <Fragment>
-        <form onSubmit={this.onSearch}>
+        <form onSubmit={this.onSearch} style={{marginTop: '10px'}}>
           <div id="searchBar">
             <input type="text" 
             className="browser-default"

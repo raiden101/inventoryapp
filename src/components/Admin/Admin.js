@@ -83,7 +83,7 @@ class Home extends Component {
 
   onLogout = e => {
     saveToLocalStorage("");
-    this.props.history.replace('/admin/login');
+    this.props.history.replace('/login/admin');
   }
 
   render() {
@@ -98,20 +98,30 @@ class Home extends Component {
           />
         );
       });
+      let welcome = null;
+      if(this.props.location.pathname === '/admin' ||
+      this.props.location.pathname === '/admin/')
+        welcome = (<center>
+          <h5 className="fade">Welcome Admin</h5>
+          <h6 className="fade">Select one of the options to get started.</h6>
+        </center>)
       return (
         <Fragment>
           <Navbar
           navColor="purple darken-1" 
-          onLogout={this.onLogout}/>
+          onLogout={this.onLogout}
+          mobileLinks={adminFeatures}
+          brandLogoRedirect="/admin"/>
           <div className="container">
             <div className="row">
-              <div className="col s12 m4" 
+              <div className="col l4 hide-on-med-and-down" 
               style={{ paddingLeft: "0px", marginBottom: '25px' }}>
                 <FeatureList 
                 fontColor="purple-text darken-2"
                 features={adminFeatures} />
               </div>
-              <div className="col s12 m7 offset-m1">
+              <div className="col s12 l7 offset-l1">
+                {welcome}
                 <Switch>
                   {myRoutes}
                   <Route path="/admin/updateLowStockItem"

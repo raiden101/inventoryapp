@@ -76,8 +76,8 @@ export default class User extends Component {
       if(pathname === '/user' || pathname === '/user/') {
         welcomeMessage = (
           <div className="valign">
-            <h5 className="fade"><center>Hello User</center></h5>
-            <h4 className="fade"><center>Select an option in the menu to get started.</center></h4>                  
+            <h6 className="fade"><center>Hello User</center></h6>
+            <h5 className="fade"><center>Select an option in the menu to get started.</center></h5>                  
           </div>
         );
       }
@@ -89,17 +89,20 @@ export default class User extends Component {
       ));
       toShow = (
         <div id="userComponent">
-          <Navbar onLogout={this.onLogout} navColor="blue lighten-3" />
+          <Navbar onLogout={this.onLogout} 
+          navColor="blue lighten-3"
+          mobileLinks={userFeatures} 
+          brandLogoRedirect="/user"/>
           <div className="container">
             <div className="row">
-              <div className="col s12 m4 push-m8"
+              <div className="col l4 push-l8 hide-on-med-and-down"
               style={{marginBottom: "15px"}}>
                 <FeatureList
                   fontColor="blue-text lighten-4"
                   features={userFeatures}
                 />
               </div>
-              <div className="col s12 m8 pull-m4">
+              <div className="col s12 l8 pull-l4">
                 <Switch>{routes}</Switch>
                 {welcomeMessage}
               </div>

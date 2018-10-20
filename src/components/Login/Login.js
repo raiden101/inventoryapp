@@ -14,7 +14,8 @@ export default class Login extends Component {
       username: "",
       password: "",
       loginError: "",
-      buttonDisabled: true
+      buttonDisabled: true,
+      buttonText: "Login"
     }
   }
 
@@ -31,6 +32,7 @@ export default class Login extends Component {
   }
    
   onSubmitHandler = e => {
+    this.setState({ buttonText: "Logging in...", buttonDisabled: true })
     e.preventDefault();
     axios.post('/api/auth/login', {
       username: this.state.username,
@@ -39,7 +41,7 @@ export default class Login extends Component {
     })
     .then(({data}) => {
       if(data.error) {
-        this.setState({ loginError: data.error });
+        this.setState({ loginError: data.error, buttonText: "Login" });
       }else {
         saveToLocalStorage(data);
         this.props.history.push({
@@ -86,9 +88,9 @@ export default class Login extends Component {
           <MatWrapper colSpec="col s12 m10 offset-m1">
             <button 
             className="btn waves-effect waves-light purple darken-3"
-            style={{marginTop: '-20px'}}
+            style={{marginTop: '-20px', width: '100%'}}
             disabled={this.state.buttonDisabled}>
-              Login
+              {this.state.buttonText}
             </button>
           </MatWrapper>
 

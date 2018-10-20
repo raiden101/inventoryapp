@@ -8,7 +8,7 @@ class App extends Component {
   render() {
     return (
       <Switch>
-        <Route exact path="/admin/login" component={props => {
+        <Route exact path="/login/admin" component={props => {
           return <Login 
           loginHeader="Admin Login" 
           adminFlag={1} 
