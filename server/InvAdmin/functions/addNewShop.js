@@ -15,7 +15,7 @@ module.exports = (req, res) => {
         if(err)
           res.json({ success: false, msg: "Error while uploading. " });
         else
-          res.json({ msg: "Successfully added to db!", success: true })          
+          res.json({ msg: `Successfull! shopID: ${result1.insertId}`, success: true })          
       })
     }else
       res.json({ success: false, msg: "Error while uploading. " });

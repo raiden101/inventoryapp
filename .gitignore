@@ -23,3 +23,5 @@ yarn-error.log*
 /credentials.js
 
 /public/fontAwesome
+
+.env

@@ -1,4 +1,3 @@
-const { key } = require('../../credentials');
 const jwt = require('jsonwebtoken');
 
 module.exports = adminFlag => (req, res, next) => {
@@ -7,7 +6,7 @@ module.exports = adminFlag => (req, res, next) => {
     res.json({ auth: -1 });
   else {
     try {
-      let decodedData = jwt.verify(token, key);
+      let decodedData = jwt.verify(token, process.env.KEY);
       if(decodedData.adminFlag === adminFlag) {
         req.userData = decodedData;
         next();

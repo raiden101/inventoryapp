@@ -13,7 +13,7 @@ export default class AddNewShop extends Component {
   };
   onSubmitHandler = e => {
     e.preventDefault();
-    let data = { 
+    let data = {
       owner: {
         name: this.state.ownerName,
         phoneNumber: this.state.phoneNumber
@@ -29,7 +29,13 @@ export default class AddNewShop extends Component {
       .then(({ data }) => {
         toast({ html: `${data.msg}` });
         if (data.success)
-          this.setState({ shopid: "", name: "", ownerName: "", address: "" });
+          this.setState({
+            ownerName: "",
+            phoneNumber: "",
+            shopAddress: "",
+            shopName: "",
+            telephoneNumber: "",
+          });
       })
       .catch(err => {
         toast({ html: "Ooops!! something went wrong" });
@@ -93,7 +99,7 @@ export default class AddNewShop extends Component {
               <input
                 type="text"
                 name="telephoneNumber"
-                value={this.state.ownetelephoneNumberrName}
+                value={this.state.telephoneNumber}
                 onChange={this.onInputHandler}
               />
               <label htmlFor="telephoneNumber">Telephone number</label>

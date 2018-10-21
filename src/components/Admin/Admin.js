@@ -12,6 +12,7 @@ import AddNewShop from './AddNewShop/AddNewShop';
 import Orders from './Orders/Orders';
 import ViewOrder from '../UI/common/ViewOrder';
 import { saveToLocalStorage, getToken, tokenExists } from '../../util/tokenManagement';
+import ShopList from './ShopList/ShopList';
 
 const adminFeatures = [
   { 
@@ -23,8 +24,9 @@ const adminFeatures = [
   {
     name: "Register new owner", path: "/admin/addNewShop", component: AddNewShop
   },
+  { name: "Shop List", path: "/admin/shopList", component: ShopList },
   { name: "Notifications", path: "/admin/notifications", component: NotificationHome },
-  { name: "Orders", path: "/admin/orders", component: Orders }
+  { name: "Orders", path: "/admin/orders", component: Orders },
 ], additionalRoutes = [
   {
     name: "add to inv",

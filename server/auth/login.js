@@ -1,10 +1,9 @@
 const jwt = require('jsonwebtoken');
 
 const { sqlConnection } = require('../util/sqlConn');
-const { key } = require('../../credentials');
 
 const getTokenFor = (obj, callback) => {
-  jwt.sign(obj, key, { expiresIn: 60 * 60 }, (err, token) => {
+  jwt.sign(obj, process.env.KEY, { expiresIn: 60 * 60 }, (err, token) => {
     if(err)
       callback("Error while generating token", null);
     else
