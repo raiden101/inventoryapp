@@ -12,21 +12,24 @@ const getTokenFor = (obj, callback) => {
 }
 
 module.exports = (req, res) => {
+  let username = req.body.username.replace(/'/g, "''");
+  let password = req.body.password.replace(/'/g, "''");
+
   let loginQuery = req.body.adminFlag === 1 ? `select count(*) 
   from admin
-  where username='${req.body.username}' and
-  password='${req.body.password}'` : 
+  where username='${username}' and
+  password='${password}'` : 
   `select count(*) 
   from owner
-  where shopid='${req.body.username}' and
-  password='${req.body.password}'   
+  where shopid='${username}' and
+  password='${password}'   
   `
 
   sqlConnection.query(loginQuery, (err, result, fields) => {
     let resCount = result[0]['count(*)'];
     if(resCount > 0) {
       getTokenFor({
-        username: req.body.username,
+        username: username,
         adminFlag: req.body.adminFlag
       }, (err, token) => {
         if(err)
