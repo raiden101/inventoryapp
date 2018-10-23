@@ -1,19 +1,35 @@
 import React, { Component, Fragment } from 'react'
-// import searchIcon from '../../../util/a.png';
+import axios from 'axios';
+
 import Item from './Item';
 import Loader from '../../UI/Loader';
 
-import axios from 'axios';
 export default class PlaceOrder extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searching: false,
+      searching: true,
       searchResult: [],
       searchString: "",
       searchError: "",
       haveSearched: false
     }
+  }
+
+  componentDidMount() {
+    axios
+      .get('/api/user/getLikedItems')
+      .then(({data}) => {
+        if(data.error)
+          this.setState({ searching: false, searchError: data.error })
+        else
+          this.setState({ searchResult: data, searching: false })
+      })
+      .catch(err => {
+        this.setState({ 
+          searchError: "Ooops!!something went wrong!!", searching: false 
+        })
+      })
   }
 
   onInputHandler = (e) => {
@@ -46,26 +62,49 @@ export default class PlaceOrder extends Component {
   render() {
     let btnDisabled = this.state.searchString === "" || this.state.searching;
     let searchResultJSX;
-    if(!this.state.haveSearched)
-      searchResultJSX = <h5 className="fade center">Start searching!!</h5>;
+    
+    if(this.state.searching)
+      searchResultJSX = (<center><Loader color="blue"/></center>);
     else if(this.state.searchError)
       searchResultJSX = <h5 className="center">{this.state.searchError}</h5>;
-    else if(this.state.searching)
-      searchResultJSX = <center><Loader color="blue"/></center>
-    else if(!this.state.searching && this.state.searchResult.length === 0) 
-      searchResultJSX = <h5 className="center">No search result!!</h5>
-    else 
-      searchResultJSX = (
-        <div id="searchResultList">
-          {this.state.searchResult.map(el => {
-            return <Item {...el} key={el.itemID}/>
-          })}  
-        </div>
-      )
-      
+    else if(this.state.searchResult) {
+      let l = this.state.searchResult.length;
+      if(l === 0)
+        searchResultJSX = (<h5 className="center">
+          {this.state.haveSearched ? "No search result!!" : 
+          "......"}
+        </h5>);
+      else
+        searchResultJSX = (
+          <div id="searchResultList">
+            {this.state.searchResult.map(el => {
+              return <Item {...el} key={el.itemID}/>
+            })}  
+          </div>
+        )
+    }
+     
+    // if(!this.state.haveSearched)
+    //   searchResultJSX = <h5 className="fade center">Start searching!!</h5>;
+    // else if(this.state.searchError)
+    //   searchResultJSX = <h5 className="center">{this.state.searchError}</h5>;
+    // else if(this.state.searching)
+    //   searchResultJSX = <center><Loader color="blue"/></center>
+    // else if(!this.state.searching && this.state.searchResult.length === 0) 
+    //   searchResultJSX = <h5 className="center">No search result!!</h5>
+    // else 
+    //   searchResultJSX = (
+    //     <div id="searchResultList">
+    //       {this.state.searchResult.map(el => {
+    //         return <Item {...el} key={el.itemID}/>
+    //       })}  
+    //     </div>
+    //   )
+    let msg = !this.state.haveSearched && this.state.searchResult.length>0 ? 
+    (<h6>Things you may like...</h6>) : null;
     return (
       <Fragment>
-        <form onSubmit={this.onSearch} style={{marginTop: '10px'}}>
+        <form onSubmit={this.onSearch} style={{margin: '15px 0px 20px 0px'}}>
           <div id="searchBar">
             <input type="text" 
             className="browser-default"
@@ -80,6 +119,7 @@ export default class PlaceOrder extends Component {
             </button>          
           </div>
         </form>
+        {msg}
         <div id="searchResults">
           {searchResultJSX}
         </div>

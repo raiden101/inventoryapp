@@ -125,7 +125,8 @@ class AddToInventory extends Component {
                 onChange={this.onChangeHandler}
                 value={this.state.itemName}
               />
-              <label htmlFor="itemName">Item name</label>
+              <label htmlFor="itemName"
+              className={this.state.itemName===""?"":"active"}>Item name</label>
             </div>
             <div className="input-field col s12 m6">
               <input
@@ -134,7 +135,8 @@ class AddToInventory extends Component {
                 onChange={this.onChangeHandler}
                 value={this.state.quantity}
               />
-              <label htmlFor="quantity">Quantity</label>
+              <label htmlFor="quantity"
+              className={this.state.quantity===""?"":"active"}>Quantity</label>
             </div>
           </div>
 
@@ -146,7 +148,8 @@ class AddToInventory extends Component {
                 onChange={this.onChangeHandler}
                 value={this.state.brandName}
               />
-              <label htmlFor="brandName">Brand name</label>
+              <label htmlFor="brandName"
+              className={this.state.brandName===""?"":"active"}>Brand name</label>
             </div>
             <div className="input-field col s12 m6">
               <input
@@ -155,7 +158,8 @@ class AddToInventory extends Component {
                 onChange={this.onChangeHandler}
                 value={this.state.pricePerUnit}
               />
-              <label htmlFor="pricePerUnit">Price Per Unit</label>{" "}
+              <label htmlFor="pricePerUnit"
+              className={this.state.pricePerUnit===""?"":"active"}>Price Per Unit</label>{" "}
             </div>
           </div>
 
@@ -167,7 +171,8 @@ class AddToInventory extends Component {
                 onChange={this.onChangeHandler}
                 value={this.state.minQuantity}
               />
-              <label htmlFor="minQuantity">Minimum quantity</label>
+              <label htmlFor="minQuantity"
+              className={this.state.minQuantity===""?"":"active"}>Minimum quantity</label>
             </div>
             <div className="input-field col s12 m6">
               <input
@@ -176,7 +181,8 @@ class AddToInventory extends Component {
                 onChange={this.onChangeHandler}
                 value={this.state.expiryDate}
               />
-              <label htmlFor="expiryDate">Expiry date</label>
+              <label htmlFor="expiryDate"
+              className={this.state.expiryDate===""?"":"active"}>Expiry date</label>
             </div>
           </div>
 
@@ -188,7 +194,8 @@ class AddToInventory extends Component {
                 onChange={this.onChangeHandler}
                 value={this.state.category}
               />
-              <label htmlFor="category">Category</label>
+              <label htmlFor="category"
+              className={this.state.category===""?"":"active"}>Category</label>
             </div>
             <div className="col s12 m6" style={{ marginTop: "20px" }}>
               <div className="col s6">

@@ -3,16 +3,27 @@ import { Link } from "react-router-dom";
 import { Sidenav } from "materialize-css";
 
 export default class Navbar extends Component {
+  state = {
+    inst: null
+  }
   componentDidMount() {
-    if (this.props.mobileLinks)
-      Sidenav.init(document.querySelector(".sidenav"));
+    if (this.props.mobileLinks) {
+      let nav = document.querySelector(".sidenav");
+      Sidenav.init(nav);
+      this.setState({ inst: Sidenav.getInstance(nav) });
+    }
+  }
+
+  closeNav = () => {
+    if(this.state.inst !== null)
+      this.state.inst.close();
   }
   render() {
     let navClasses = "nav-wrapper " + this.props.navColor;
     let mobile = null;
     if (this.props.mobileLinks) {
       mobile = (
-        <ul className="sidenav" id="mobileNav">
+        <ul className="sidenav" id="mobileNav" onClick={this.closeNav}>
           <li style={{marginTop: '10px'}}>
             <Link to={this.props.brandLogoRedirect}>
               <center>

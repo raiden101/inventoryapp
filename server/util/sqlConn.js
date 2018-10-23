@@ -7,12 +7,9 @@ const fs = require("fs");
 //   password : 'root',
 //   database : 'invm'
 // });
-const sqlConnection = mysql.createConnection({
-  host: process.env.DATABASE_URL,
-  user: process.env.DATABASE_NAME,
-  password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE_NAME
-});
+const sqlConnection = mysql.createConnection(
+  process.env.DATABASE_URL
+);
 
 const closeConn = callback => {
   sqlConnection.end(err => {
