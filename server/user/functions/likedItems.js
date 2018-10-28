@@ -6,7 +6,7 @@ module.exports = (req, res) => {
     from item
     where category in(
       select category
-      from item
+      from itemk
       where itemID in(
         select distinct itemID
         from orderList 
